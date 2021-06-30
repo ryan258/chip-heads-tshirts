@@ -33,12 +33,12 @@ export default class SignUp extends Component {
 
       await createUserProfileDocument(user, { displayName })
 
-      this.setState = {
+      this.setState({
         displayName: '',
         email: '',
         password: '',
         confirmPassword: ''
-      }
+      })
     } catch (error) {
       console.log(error)
     }
