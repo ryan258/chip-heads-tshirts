@@ -24,11 +24,33 @@ class App extends React.Component {
   unsubscribeFromAuth = null
   // we want Firebase to known when someone signs in and signs out - when the auth state has changed
   componentDidMount() {
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async (user) => {
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       // this.setState({
       //   currentUser: user
       // })
-      createUserProfileDocument(user) // we're getting back our doc ref obj
+      // createUserProfileDocument(user) // we're getting back our doc ref obj
+
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth)
+
+        userRef.onSnapshot((snapShot) => {
+          this.setState(
+            {
+              currentUser: {
+                id: snapShot.id,
+                ...snapShot.data()
+              }
+            }
+            // ,
+            // () => {
+            //   console.log(this.state)
+            // }
+          )
+        })
+        // console.log(this.state)
+      } else {
+        this.setState({ currentUser: userAuth })
+      }
 
       // console.log(this.state.currentUser)
       // console.log(user)
