@@ -8,7 +8,7 @@ import ShopPage from './pages/shop/shop.component'
 import SignInSignUpPage from './pages/sign-in-sign-up/sign-in-sign-up.component'
 import Header from './components/header/header.component'
 
-import { auth } from './firebase/firebase.utils'
+import { auth, createUserProfileDocument } from './firebase/firebase.utils'
 
 class App extends React.Component {
   constructor() {
@@ -24,13 +24,14 @@ class App extends React.Component {
   unsubscribeFromAuth = null
   // we want Firebase to known when someone signs in and signs out - when the auth state has changed
   componentDidMount() {
-    this.unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
-      this.setState({
-        currentUser: user
-      })
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async (user) => {
+      // this.setState({
+      //   currentUser: user
+      // })
+      createUserProfileDocument(user) // we're getting back our doc ref obj
 
       // console.log(this.state.currentUser)
-      console.log(user)
+      // console.log(user)
       // whenever any changes ovvur on Firebase related to this App, Firebase will send off a status change that that user has updated and whether they've signed in or out
       // so we don't have to fetch all the time :) - this connection will always be there as long as this component is mounted on the DOM
     })
